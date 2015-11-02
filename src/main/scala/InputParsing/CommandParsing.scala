@@ -25,8 +25,14 @@ object Direction {
 
 object CommandParsing {
   val place = "PLACE (\\d+),(\\d)+,(\\w+)".r
+  val tabletopDimensions = 0 to 5
+
+  def coordinatesOnTable(x: String, y: String): Boolean = {
+    tabletopDimensions.contains(x.toInt) && tabletopDimensions.contains(y.toInt)
+  }
+
   def toRobotCommands(lines: Iterator[String]): Iterator[RobotCommands] = lines.flatMap {
-    case place(x, y, direction) =>
+    case place(x, y, direction) if coordinatesOnTable(x, y) =>
       Direction.get(direction).map(Place(x.toInt, y.toInt, _))
     case "MOVE" => Some(Move)
     case "LEFT" => Some(Left)
