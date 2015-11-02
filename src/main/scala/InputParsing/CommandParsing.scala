@@ -6,12 +6,12 @@ case object East extends Direction
 case object South extends Direction
 case object West extends Direction
 
-sealed trait RobotCommands
-case class Place(x: Int, y: Int, direction: Direction) extends RobotCommands
-case object Move extends RobotCommands
-case object Left extends RobotCommands
-case object Right extends RobotCommands
-case object Report extends RobotCommands
+sealed trait RobotCommand
+case class Place(x: Int, y: Int, direction: Direction) extends RobotCommand
+case object Move extends RobotCommand
+case object Left extends RobotCommand
+case object Right extends RobotCommand
+case object Report extends RobotCommand
 
 object Direction {
   val directionMapping = Map[String, Direction](
@@ -23,15 +23,18 @@ object Direction {
   def get = directionMapping.get _
 }
 
+object Tabletop {
+  def dimensions = 0 to 4
+}
+
 object CommandParsing {
   val place = "PLACE (\\d+),(\\d)+,(\\w+)".r
-  val tabletopDimensions = 0 to 5
 
   def coordinatesOnTable(x: String, y: String): Boolean = {
-    tabletopDimensions.contains(x.toInt) && tabletopDimensions.contains(y.toInt)
+    Tabletop.dimensions.contains(x.toInt) && Tabletop.dimensions.contains(y.toInt)
   }
 
-  def toRobotCommands(lines: Iterator[String]): Iterator[RobotCommands] = lines.flatMap {
+  def toRobotCommands(lines: Iterator[String]): Iterator[RobotCommand] = lines.flatMap {
     case place(x, y, direction) if coordinatesOnTable(x, y) =>
       Direction.get(direction).map(Place(x.toInt, y.toInt, _))
     case "MOVE" => Some(Move)
