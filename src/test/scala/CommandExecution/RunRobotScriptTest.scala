@@ -50,40 +50,30 @@ class RunRobotScriptTest extends org.specs2.mutable.Specification {
 
         "go diagonally north east when not at an edge" in {
           RunRobotScript.nextState(ValidState(0, 0, North), Diagonal(North, East)) should beEqualTo(ValidState(1, 1, North))
-          RunRobotScript.nextState(ValidState(0, 0, North), Diagonal(East, North)) should beEqualTo(ValidState(1, 1, North))
         }
 
         "not go diagonally north east when at an edge" in {
           RunRobotScript.nextState(ValidState(4, 4, North), Diagonal(North, East)) should beEqualTo(ValidState(4, 4, North))
-          RunRobotScript.nextState(ValidState(4, 4, North), Diagonal(East, North)) should beEqualTo(ValidState(4, 4, North))
           RunRobotScript.nextState(ValidState(3, 4, North), Diagonal(North, East)) should beEqualTo(ValidState(3, 4, North))
-          RunRobotScript.nextState(ValidState(3, 4, North), Diagonal(East, North)) should beEqualTo(ValidState(3, 4, North))
           RunRobotScript.nextState(ValidState(4, 3, North), Diagonal(North, East)) should beEqualTo(ValidState(4, 3, North))
-          RunRobotScript.nextState(ValidState(4, 3, North), Diagonal(East, North)) should beEqualTo(ValidState(4, 3, North))
         }
 
         "not go diagonally south east" in {
           RunRobotScript.nextState(ValidState(0, 1, North), Diagonal(South, East)) should beEqualTo(ValidState(0, 1, North))
-          RunRobotScript.nextState(ValidState(0, 1, North), Diagonal(East, South)) should beEqualTo(ValidState(0, 1, North))
         }
 
         "not go diagonally south west" in {
           RunRobotScript.nextState(ValidState(1, 1, North), Diagonal(South, West)) should beEqualTo(ValidState(1, 1, North))
-          RunRobotScript.nextState(ValidState(1, 1, North), Diagonal(West, South)) should beEqualTo(ValidState(1, 1, North))
         }
 
         "go diagonally north west when not at an edge" in {
           RunRobotScript.nextState(ValidState(1, 0, North), Diagonal(North, West)) should beEqualTo(ValidState(0, 1, North))
-          RunRobotScript.nextState(ValidState(1, 0, North), Diagonal(West, North)) should beEqualTo(ValidState(0, 1, North))
         }
 
         "not go diagonally north west when at an edge" in {
           RunRobotScript.nextState(ValidState(0, 4, North), Diagonal(North, West)) should beEqualTo(ValidState(0, 4, North))
-          RunRobotScript.nextState(ValidState(0, 4, North), Diagonal(West, North)) should beEqualTo(ValidState(0, 4, North))
           RunRobotScript.nextState(ValidState(0, 3, North), Diagonal(North, West)) should beEqualTo(ValidState(0, 3, North))
-          RunRobotScript.nextState(ValidState(0, 3, North), Diagonal(West, North)) should beEqualTo(ValidState(0, 3, North))
           RunRobotScript.nextState(ValidState(1, 4, North), Diagonal(North, West)) should beEqualTo(ValidState(1, 4, North))
-          RunRobotScript.nextState(ValidState(1, 4, North), Diagonal(West, North)) should beEqualTo(ValidState(1, 4, North))
         }
       }
 
@@ -106,40 +96,30 @@ class RunRobotScriptTest extends org.specs2.mutable.Specification {
 
         "go diagonally north east when not at an edge" in {
           RunRobotScript.nextState(ValidState(0, 0, East), Diagonal(North, East)) should beEqualTo(ValidState(1, 1, East))
-          RunRobotScript.nextState(ValidState(0, 0, East), Diagonal(East, North)) should beEqualTo(ValidState(1, 1, East))
         }
 
         "not go diagonally north east when at an edge" in {
           RunRobotScript.nextState(ValidState(4, 4, East), Diagonal(North, East)) should beEqualTo(ValidState(4, 4, East))
-          RunRobotScript.nextState(ValidState(4, 4, East), Diagonal(East, North)) should beEqualTo(ValidState(4, 4, East))
           RunRobotScript.nextState(ValidState(3, 4, East), Diagonal(North, East)) should beEqualTo(ValidState(3, 4, East))
-          RunRobotScript.nextState(ValidState(3, 4, East), Diagonal(East, North)) should beEqualTo(ValidState(3, 4, East))
           RunRobotScript.nextState(ValidState(4, 3, East), Diagonal(North, East)) should beEqualTo(ValidState(4, 3, East))
-          RunRobotScript.nextState(ValidState(4, 3, East), Diagonal(East, North)) should beEqualTo(ValidState(4, 3, East))
         }
 
         "go diagonally south east when not at an edge" in {
           RunRobotScript.nextState(ValidState(0, 1, East), Diagonal(South, East)) should beEqualTo(ValidState(1, 0, East))
-          RunRobotScript.nextState(ValidState(0, 1, East), Diagonal(East, South)) should beEqualTo(ValidState(1, 0, East))
         }
 
         "not go diagonally south east when at an edge" in {
           RunRobotScript.nextState(ValidState(4, 0, East), Diagonal(South, East)) should beEqualTo(ValidState(4, 0, East))
-          RunRobotScript.nextState(ValidState(4, 0, East), Diagonal(East, South)) should beEqualTo(ValidState(4, 0, East))
           RunRobotScript.nextState(ValidState(4, 1, East), Diagonal(South, East)) should beEqualTo(ValidState(4, 1, East))
-          RunRobotScript.nextState(ValidState(4, 1, East), Diagonal(East, South)) should beEqualTo(ValidState(4, 1, East))
           RunRobotScript.nextState(ValidState(3, 0, East), Diagonal(South, East)) should beEqualTo(ValidState(3, 0, East))
-          RunRobotScript.nextState(ValidState(3, 0, East), Diagonal(East, South)) should beEqualTo(ValidState(3, 0, East))
         }
 
         "not go diagonally south west" in {
           RunRobotScript.nextState(ValidState(1, 1, East), Diagonal(South, West)) should beEqualTo(ValidState(1, 1, East))
-          RunRobotScript.nextState(ValidState(1, 1, East), Diagonal(West, South)) should beEqualTo(ValidState(1, 1, East))
         }
 
         "not go diagonally north west" in {
           RunRobotScript.nextState(ValidState(1, 0, East), Diagonal(North, West)) should beEqualTo(ValidState(1, 0, East))
-          RunRobotScript.nextState(ValidState(1, 0, East), Diagonal(West, North)) should beEqualTo(ValidState(1, 0, East))
         }
       }
 
@@ -162,40 +142,30 @@ class RunRobotScriptTest extends org.specs2.mutable.Specification {
 
         "not go diagonally north east" in {
           RunRobotScript.nextState(ValidState(0, 0, South), Diagonal(North, East)) should beEqualTo(ValidState(0, 0, South))
-          RunRobotScript.nextState(ValidState(0, 0, South), Diagonal(East, North)) should beEqualTo(ValidState(0, 0, South))
         }
 
         "go diagonally south east when not at an edge" in {
           RunRobotScript.nextState(ValidState(0, 1, South), Diagonal(South, East)) should beEqualTo(ValidState(1, 0, South))
-          RunRobotScript.nextState(ValidState(0, 1, South), Diagonal(East, South)) should beEqualTo(ValidState(1, 0, South))
         }
 
         "not go diagonally south east when at an edge" in {
           RunRobotScript.nextState(ValidState(4, 0, South), Diagonal(South, East)) should beEqualTo(ValidState(4, 0, South))
-          RunRobotScript.nextState(ValidState(4, 0, South), Diagonal(East, South)) should beEqualTo(ValidState(4, 0, South))
           RunRobotScript.nextState(ValidState(4, 1, South), Diagonal(South, East)) should beEqualTo(ValidState(4, 1, South))
-          RunRobotScript.nextState(ValidState(4, 1, South), Diagonal(East, South)) should beEqualTo(ValidState(4, 1, South))
           RunRobotScript.nextState(ValidState(3, 0, South), Diagonal(South, East)) should beEqualTo(ValidState(3, 0, South))
-          RunRobotScript.nextState(ValidState(3, 0, South), Diagonal(East, South)) should beEqualTo(ValidState(3, 0, South))
         }
 
         "go diagonally south west when not at an edge" in {
           RunRobotScript.nextState(ValidState(1, 1, South), Diagonal(South, West)) should beEqualTo(ValidState(0, 0, South))
-          RunRobotScript.nextState(ValidState(1, 1, South), Diagonal(West, South)) should beEqualTo(ValidState(0, 0, South))
         }
 
         "not go diagonally south west when at an edge" in {
           RunRobotScript.nextState(ValidState(0, 0, South), Diagonal(South, West)) should beEqualTo(ValidState(0, 0, South))
-          RunRobotScript.nextState(ValidState(0, 0, South), Diagonal(West, South)) should beEqualTo(ValidState(0, 0, South))
           RunRobotScript.nextState(ValidState(1, 0, South), Diagonal(South, West)) should beEqualTo(ValidState(1, 0, South))
-          RunRobotScript.nextState(ValidState(1, 0, South), Diagonal(West, South)) should beEqualTo(ValidState(1, 0, South))
           RunRobotScript.nextState(ValidState(0, 1, South), Diagonal(South, West)) should beEqualTo(ValidState(0, 1, South))
-          RunRobotScript.nextState(ValidState(0, 1, South), Diagonal(West, South)) should beEqualTo(ValidState(0, 1, South))
         }
 
         "not go diagonally north west" in {
           RunRobotScript.nextState(ValidState(1, 0, South), Diagonal(North, West)) should beEqualTo(ValidState(1, 0, South))
-          RunRobotScript.nextState(ValidState(1, 0, South), Diagonal(West, North)) should beEqualTo(ValidState(1, 0, South))
         }
       }
 
@@ -218,40 +188,30 @@ class RunRobotScriptTest extends org.specs2.mutable.Specification {
 
         "not go diagonally north east" in {
           RunRobotScript.nextState(ValidState(0, 0, West), Diagonal(North, East)) should beEqualTo(ValidState(0, 0, West))
-          RunRobotScript.nextState(ValidState(0, 0, West), Diagonal(East, North)) should beEqualTo(ValidState(0, 0, West))
         }
 
         "not go diagonally south east when not at an edge" in {
           RunRobotScript.nextState(ValidState(0, 1, West), Diagonal(South, East)) should beEqualTo(ValidState(0, 1, West))
-          RunRobotScript.nextState(ValidState(0, 1, West), Diagonal(East, South)) should beEqualTo(ValidState(0, 1, West))
         }
 
         "go diagonally south west when not at an edge" in {
           RunRobotScript.nextState(ValidState(1, 1, West), Diagonal(South, West)) should beEqualTo(ValidState(0, 0, West))
-          RunRobotScript.nextState(ValidState(1, 1, West), Diagonal(West, South)) should beEqualTo(ValidState(0, 0, West))
         }
 
         "not go diagonally south west when at an edge" in {
           RunRobotScript.nextState(ValidState(0, 0, West), Diagonal(South, West)) should beEqualTo(ValidState(0, 0, West))
-          RunRobotScript.nextState(ValidState(0, 0, West), Diagonal(West, South)) should beEqualTo(ValidState(0, 0, West))
           RunRobotScript.nextState(ValidState(1, 0, West), Diagonal(South, West)) should beEqualTo(ValidState(1, 0, West))
-          RunRobotScript.nextState(ValidState(1, 0, West), Diagonal(West, South)) should beEqualTo(ValidState(1, 0, West))
           RunRobotScript.nextState(ValidState(0, 1, West), Diagonal(South, West)) should beEqualTo(ValidState(0, 1, West))
-          RunRobotScript.nextState(ValidState(0, 1, West), Diagonal(West, South)) should beEqualTo(ValidState(0, 1, West))
         }
 
         "go diagonally north west when not at an edge" in {
           RunRobotScript.nextState(ValidState(1, 0, West), Diagonal(North, West)) should beEqualTo(ValidState(0, 1, West))
-          RunRobotScript.nextState(ValidState(1, 0, West), Diagonal(West, North)) should beEqualTo(ValidState(0, 1, West))
         }
 
         "not go diagonally north west when at an edge" in {
           RunRobotScript.nextState(ValidState(0, 4, West), Diagonal(North, West)) should beEqualTo(ValidState(0, 4, West))
-          RunRobotScript.nextState(ValidState(0, 4, West), Diagonal(West, North)) should beEqualTo(ValidState(0, 4, West))
           RunRobotScript.nextState(ValidState(1, 4, West), Diagonal(North, West)) should beEqualTo(ValidState(1, 4, West))
-          RunRobotScript.nextState(ValidState(1, 4, West), Diagonal(West, North)) should beEqualTo(ValidState(1, 4, West))
           RunRobotScript.nextState(ValidState(0, 3, West), Diagonal(North, West)) should beEqualTo(ValidState(0, 3, West))
-          RunRobotScript.nextState(ValidState(0, 3, West), Diagonal(West, North)) should beEqualTo(ValidState(0, 3, West))
         }
       }
 

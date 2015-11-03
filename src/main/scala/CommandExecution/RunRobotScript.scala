@@ -53,18 +53,18 @@ object RunRobotScript {
   }
 
   def diagonal: RobotScript = {
-    case (state@ValidState(_, _, North), (Diagonal(South, _) | Diagonal(_, South))) => state
-    case (state@ValidState(_, _, East), (Diagonal(West, _) | Diagonal(_, West))) => state
-    case (state@ValidState(_, _, South), (Diagonal(North, _) | Diagonal(_, North))) => state
-    case (state@ValidState(_, _, West), (Diagonal(East, _) | Diagonal(_, East))) => state
-    case (state@ValidState(_, `largeDimension`, _), (Diagonal(North, _) | Diagonal(_, North))) => state
-    case (state@ValidState(`largeDimension`, _, _), (Diagonal(East, _) | Diagonal(_, East))) => state
-    case (state@ValidState(_, `smallDimension`, _), (Diagonal(South, _) | Diagonal(_, South))) => state
-    case (state@ValidState(`smallDimension`, _, _), (Diagonal(West, _) | Diagonal(_, West))) => state
-    case (ValidState(x, y, direction), (Diagonal(North, East) | Diagonal(East, North))) => ValidState(x+1, y+1, direction)
-    case (ValidState(x, y, direction), (Diagonal(South, East) | Diagonal(East, South))) => ValidState(x+1, y-1, direction)
-    case (ValidState(x, y, direction), (Diagonal(South, West) | Diagonal(West, South))) => ValidState(x-1, y-1, direction)
-    case (ValidState(x, y, direction), (Diagonal(North, West) | Diagonal(West, North))) => ValidState(x-1, y+1, direction)
+    case (state@ValidState(_, _, North), Diagonal(South, _)) => state
+    case (state@ValidState(_, _, East), Diagonal(_, West)) => state
+    case (state@ValidState(_, _, South), Diagonal(North, _)) => state
+    case (state@ValidState(_, _, West), Diagonal(_, East)) => state
+    case (state@ValidState(_, `largeDimension`, _), Diagonal(North, _)) => state
+    case (state@ValidState(`largeDimension`, _, _), Diagonal(_, East)) => state
+    case (state@ValidState(_, `smallDimension`, _), Diagonal(South, _)) => state
+    case (state@ValidState(`smallDimension`, _, _), Diagonal(_, West)) => state
+    case (ValidState(x, y, direction), Diagonal(North, East)) => ValidState(x+1, y+1, direction)
+    case (ValidState(x, y, direction), Diagonal(South, East)) => ValidState(x+1, y-1, direction)
+    case (ValidState(x, y, direction), Diagonal(South, West)) => ValidState(x-1, y-1, direction)
+    case (ValidState(x, y, direction), Diagonal(North, West)) => ValidState(x-1, y+1, direction)
   }
 
   def nextState(state: RobotState, command: RobotCommand): RobotState = {

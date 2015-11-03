@@ -1,10 +1,12 @@
 package InputParsing
 
 sealed trait Direction
-case object North extends Direction
-case object East extends Direction
-case object South extends Direction
-case object West extends Direction
+sealed trait VerticalDirection extends Direction
+sealed trait HorizontalDirection extends Direction
+case object North extends VerticalDirection
+case object East extends HorizontalDirection
+case object South extends VerticalDirection
+case object West extends HorizontalDirection
 
 sealed trait RobotCommand
 case class Place(x: Int, y: Int, direction: Direction) extends RobotCommand
@@ -12,16 +14,28 @@ case object Move extends RobotCommand
 case object Left extends RobotCommand
 case object Right extends RobotCommand
 case object Report extends RobotCommand
-case class Diagonal(firstDirection: Direction, secondDirection: Direction) extends RobotCommand
+case class Diagonal(verticalDirection: VerticalDirection, horizontalDirection: HorizontalDirection) extends RobotCommand
 
-object Direction {
-  val directionMapping = Map[String, Direction](
+object VerticalDirection {
+  val directionMapping = Map[String, VerticalDirection](
     North.toString.toUpperCase -> North,
+    South.toString.toUpperCase -> South
+  )
+  def get = directionMapping.get _
+}
+
+object HorizontalDirection {
+  val directionMapping = Map[String, HorizontalDirection](
     East.toString.toUpperCase -> East,
-    South.toString.toUpperCase -> South,
     West.toString.toUpperCase -> West
   )
   def get = directionMapping.get _
+}
+
+object Direction {
+  def get(direction: String): Option[Direction] = {
+    VerticalDirection.get(direction) orElse HorizontalDirection.get(direction)
+  }
 }
 
 object Tabletop {
@@ -42,8 +56,8 @@ object CommandParsing {
 
   def diagonal(first: String, second: String) = {
     for {
-      firstDirection <- Direction.get(first)
-      secondDirection <- Direction.get(second)
+      firstDirection <- VerticalDirection.get(first)
+      secondDirection <- HorizontalDirection.get(second)
     } yield Diagonal(firstDirection, secondDirection)
   }
 
@@ -54,7 +68,7 @@ object CommandParsing {
     case "LEFT" => Some(Left)
     case "RIGHT" => Some(Right)
     case "REPORT" => Some(Report)
-    case diag@diagonalRegex(firstDirection, secondDirection) if firstDirection != secondDirection =>
+    case diag@diagonalRegex(firstDirection, secondDirection) =>
       diagonal(firstDirection, secondDirection)
     case _ => None
   }

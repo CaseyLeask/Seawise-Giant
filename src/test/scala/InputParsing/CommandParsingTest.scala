@@ -64,9 +64,16 @@ class CommandParsingTest extends Specification {
         CommandParsing.toRobotCommands(lines).toList must be equalTo List(Diagonal(North, West))
       }
 
+      "not parse wrongly ordered diagonals" in {
+        val lines = Iterator(
+          "DIAGONAL WEST,NORTH"
+        )
+        CommandParsing.toRobotCommands(lines).toList must be equalTo List()
+      }
+
       "not parse invalid first direction values" in {
         val lines = Iterator(
-          "DIAGONAL WESTSIDE,NORTH",
+          "DIAGONAL NORTHSIDE,WEST",
           "DIAGONAL north,WEST",
           "DIAGONAL North,WEST",
           "DIAGONAL NORTHS,WEST"
@@ -77,19 +84,9 @@ class CommandParsingTest extends Specification {
       "not parse invalid second direction values" in {
         val lines = Iterator(
           "DIAGONAL NORTH,WESTSIDE",
-          "DIAGONAL WEST,north",
-          "DIAGONAL WEST,North",
-          "DIAGONAL WEST,NORTHS"
-        )
-        CommandParsing.toRobotCommands(lines).toList must be equalTo List()
-      }
-
-      "not parse with duplicate direction values" in {
-        val lines = Iterator(
-          "DIAGONAL NORTH,NORTH",
-          "DIAGONAL EAST,EAST",
-          "DIAGONAL SOUTH,SOUTH",
-          "DIAGONAL WEST,WEST"
+          "DIAGONAL NORTH,west",
+          "DIAGONAL NORTH,West",
+          "DIAGONAL NORTH,WESTS"
         )
         CommandParsing.toRobotCommands(lines).toList must be equalTo List()
       }
