@@ -58,6 +58,43 @@ class CommandParsingTest extends Specification {
       CommandParsing.toRobotCommands(lines).toList must be equalTo List(Report)
     }
 
+    "with a DIAGONAL command" should {
+      "parse valid commands" in {
+        val lines = Iterator("DIAGONAL NORTH,WEST")
+        CommandParsing.toRobotCommands(lines).toList must be equalTo List(Diagonal(North, West))
+      }
+
+      "not parse invalid first direction values" in {
+        val lines = Iterator(
+          "DIAGONAL WESTSIDE,NORTH",
+          "DIAGONAL north,WEST",
+          "DIAGONAL North,WEST",
+          "DIAGONAL NORTHS,WEST"
+        )
+        CommandParsing.toRobotCommands(lines).toList must be equalTo List()
+      }
+
+      "not parse invalid second direction values" in {
+        val lines = Iterator(
+          "DIAGONAL NORTH,WESTSIDE",
+          "DIAGONAL WEST,north",
+          "DIAGONAL WEST,North",
+          "DIAGONAL WEST,NORTHS"
+        )
+        CommandParsing.toRobotCommands(lines).toList must be equalTo List()
+      }
+
+      "not parse with duplicate direction values" in {
+        val lines = Iterator(
+          "DIAGONAL NORTH,NORTH",
+          "DIAGONAL EAST,EAST",
+          "DIAGONAL SOUTH,SOUTH",
+          "DIAGONAL WEST,WEST"
+        )
+        CommandParsing.toRobotCommands(lines).toList must be equalTo List()
+      }
+    }
+
     "not parse mystery commands" in {
       val lines = Iterator(
         "MOVER",
