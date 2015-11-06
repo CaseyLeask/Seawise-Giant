@@ -272,6 +272,28 @@ class RunRobotScriptTest extends org.specs2.mutable.Specification {
         RunRobotScript.nextState(ValidState(0, 0, North, Set(PlacedObject(1, 0))), Move) should
           beEqualTo(ValidState(0, 1, North, Set(PlacedObject(1, 0))))
       }
+
+      "when objects are placed diagonally from the robot" should {
+        "not move north east" in {
+          RunRobotScript.nextState(ValidState(0, 0, North, Set(PlacedObject(1, 1))), Diagonal(North, East)) should
+            beEqualTo(ValidState(0, 0, North, Set(PlacedObject(1, 1))))
+        }
+
+        "not move south east" in {
+          RunRobotScript.nextState(ValidState(0, 1, East, Set(PlacedObject(1, 0))), Diagonal(South, East)) should
+            beEqualTo(ValidState(0, 1, East, Set(PlacedObject(1, 0))))
+        }
+
+        "not move south west" in {
+          RunRobotScript.nextState(ValidState(1, 1, South, Set(PlacedObject(0, 0))), Diagonal(South, West)) should
+            beEqualTo(ValidState(1, 1, South, Set(PlacedObject(0, 0))))
+        }
+
+        "not move north west" in {
+          RunRobotScript.nextState(ValidState(1, 0, West, Set(PlacedObject(0, 1))), Diagonal(North, West)) should
+            beEqualTo(ValidState(1, 0, West, Set(PlacedObject(0, 1))))
+        }
+      }
     }
   }
 }

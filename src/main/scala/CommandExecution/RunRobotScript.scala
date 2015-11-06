@@ -63,10 +63,17 @@ object RunRobotScript {
     case (state@ValidState(_, _, East , _), Diagonal(_, West)) => state
     case (state@ValidState(_, _, South, _), Diagonal(North, _)) => state
     case (state@ValidState(_, _, West , _), Diagonal(_, East)) => state
+
     case (state@ValidState(_, `largeDimension`, _, _), Diagonal(North, _)) => state
     case (state@ValidState(`largeDimension`, _, _, _), Diagonal(_, East)) => state
     case (state@ValidState(_, `smallDimension`, _, _), Diagonal(South, _)) => state
     case (state@ValidState(`smallDimension`, _, _, _), Diagonal(_, West)) => state
+
+    case (state@ValidState(x, y, direction, placedObjects), Diagonal(North, East)) if placedObjects.contains(PlacedObject(x+1, y+1)) => state
+    case (state@ValidState(x, y, direction, placedObjects), Diagonal(South, East)) if placedObjects.contains(PlacedObject(x+1, y-1)) => state
+    case (state@ValidState(x, y, direction, placedObjects), Diagonal(South, West)) if placedObjects.contains(PlacedObject(x-1, y-1)) => state
+    case (state@ValidState(x, y, direction, placedObjects), Diagonal(North, West)) if placedObjects.contains(PlacedObject(x-1, y+1)) => state
+
     case (ValidState(x, y, direction, placedObjects), Diagonal(North, East)) => ValidState(x+1, y+1, direction, placedObjects)
     case (ValidState(x, y, direction, placedObjects), Diagonal(South, East)) => ValidState(x+1, y-1, direction, placedObjects)
     case (ValidState(x, y, direction, placedObjects), Diagonal(South, West)) => ValidState(x-1, y-1, direction, placedObjects)
@@ -78,6 +85,7 @@ object RunRobotScript {
     case (state@ValidState(`largeDimension`, _, East , _), PlaceObject) => state
     case (state@ValidState(_, `smallDimension`, South, _), PlaceObject) => state
     case (state@ValidState(`smallDimension`, _, West , _), PlaceObject) => state
+
     case (ValidState(x, y, North, placedObjects), PlaceObject) => ValidState(x, y, North, placedObjects + PlacedObject(x, y+1))
     case (ValidState(x, y, East , placedObjects), PlaceObject) => ValidState(x, y, East , placedObjects + PlacedObject(x+1, y))
     case (ValidState(x, y, South, placedObjects), PlaceObject) => ValidState(x, y, South, placedObjects + PlacedObject(x, y-1))
