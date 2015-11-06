@@ -35,7 +35,7 @@ class RunRobotScriptTest extends org.specs2.mutable.Specification {
 
       "should print a map correctly" in {
         RunRobotScript.nextState(InvalidState, MapCommand) should beEqualTo(InvalidState)
-        pending
+        RunRobotScript.convertPlacedObjectsToMap(Set()) must beEqualTo("00000\n00000\n00000\n00000\n00000\n")
       }
     }
 
@@ -304,7 +304,7 @@ class RunRobotScriptTest extends org.specs2.mutable.Specification {
         "should print a map correctly" in {
           val state = ValidState(0, 0, North, Set())
           RunRobotScript.nextState(state, MapCommand) should beEqualTo(state)
-          pending
+          RunRobotScript.convertPlacedObjectsToMap(state.placedObjects) must beEqualTo("00000\n00000\n00000\n00000\n00000\n")
         }
       }
 
@@ -312,7 +312,7 @@ class RunRobotScriptTest extends org.specs2.mutable.Specification {
         "should print a map correctly"  in {
           val state = ValidState(0, 0, North, Set(PlacedObject(1, 1)))
           RunRobotScript.nextState(state, MapCommand) should beEqualTo(state)
-          pending
+          RunRobotScript.convertPlacedObjectsToMap(state.placedObjects) must beEqualTo("00000\n00000\n00000\n0X000\n00000\n")
         }
       }
     }
