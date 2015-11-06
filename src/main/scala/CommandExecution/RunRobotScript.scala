@@ -92,9 +92,14 @@ object RunRobotScript {
     case (ValidState(x, y, West , placedObjects), PlaceObject) => ValidState(x, y, West , placedObjects + PlacedObject(x-1, y))
   }
 
+  def mapCommand: RobotScript = {
+    case (state@ValidState(_, _, _, placedObjects), MapCommand) => state
+  }
+
   def nextState(state: RobotState, command: RobotCommand): RobotState = {
     (
       place orElse
+      mapCommand orElse
       invalidState orElse
       report orElse
       move orElse

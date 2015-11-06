@@ -32,6 +32,11 @@ class RunRobotScriptTest extends org.specs2.mutable.Specification {
       "should not place objects" in {
         RunRobotScript.nextState(InvalidState, PlaceObject) should beEqualTo(InvalidState)
       }
+
+      "should print a map correctly" in {
+        RunRobotScript.nextState(InvalidState, MapCommand) should beEqualTo(InvalidState)
+        pending
+      }
     }
 
     "with a valid state" should {
@@ -292,6 +297,22 @@ class RunRobotScriptTest extends org.specs2.mutable.Specification {
         "not move north west" in {
           RunRobotScript.nextState(ValidState(1, 0, West, Set(PlacedObject(0, 1))), Diagonal(North, West)) should
             beEqualTo(ValidState(1, 0, West, Set(PlacedObject(0, 1))))
+        }
+      }
+
+      "when there are no objects placed" should {
+        "should print a map correctly" in {
+          val state = ValidState(0, 0, North, Set())
+          RunRobotScript.nextState(state, MapCommand) should beEqualTo(state)
+          pending
+        }
+      }
+
+      "when there are objects placed" should {
+        "should print a map correctly"  in {
+          val state = ValidState(0, 0, North, Set(PlacedObject(1, 1)))
+          RunRobotScript.nextState(state, MapCommand) should beEqualTo(state)
+          pending
         }
       }
     }

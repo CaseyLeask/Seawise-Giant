@@ -16,6 +16,7 @@ case object Right extends RobotCommand
 case object Report extends RobotCommand
 case class Diagonal(verticalDirection: VerticalDirection, horizontalDirection: HorizontalDirection) extends RobotCommand
 case object PlaceObject extends RobotCommand
+case object MapCommand extends RobotCommand
 
 object VerticalDirection {
   val directionMapping = Map[String, VerticalDirection](
@@ -72,6 +73,7 @@ object CommandParsing {
     case diag@diagonalRegex(firstDirection, secondDirection) =>
       diagonal(firstDirection, secondDirection)
     case "PLACE_OBJECT" => Some(PlaceObject)
+    case "MAP" => Some(MapCommand)
     case _ => None
   }
 }

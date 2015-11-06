@@ -97,6 +97,11 @@ class CommandParsingTest extends Specification {
       CommandParsing.toRobotCommands(lines).toList must be equalTo List(PlaceObject)
     }
 
+    "parse MAP commands" in {
+      val lines = Iterator("MAP")
+      CommandParsing.toRobotCommands(lines).toList must be equalTo List(MapCommand)
+    }
+
     "not parse mystery commands" in {
       val lines = Iterator(
         "MOVER",
