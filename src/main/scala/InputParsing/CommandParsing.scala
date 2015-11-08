@@ -1,12 +1,39 @@
 package InputParsing
 
-sealed trait Direction
-sealed trait VerticalDirection extends Direction
-sealed trait HorizontalDirection extends Direction
-case object North extends VerticalDirection
-case object East extends HorizontalDirection
-case object South extends VerticalDirection
-case object West extends HorizontalDirection
+sealed trait Direction {
+  def dx: Int
+  def dy: Int
+  def clockwise: Direction
+  def counterclockwise: Direction
+}
+
+abstract sealed class VerticalDirection(override val dy: Int) extends Direction {
+  override val dx: Int = 0
+}
+
+abstract sealed class HorizontalDirection(override val dx: Int) extends Direction {
+  override val dy: Int = 0
+}
+
+case object North extends VerticalDirection  ( 1) {
+  override def clockwise: Direction = East
+  override def counterclockwise: Direction = West
+}
+
+case object East  extends HorizontalDirection( 1) {
+  override def clockwise: Direction = South
+  override def counterclockwise: Direction = North
+}
+
+case object South extends VerticalDirection  (-1) {
+  override def clockwise: Direction = West
+  override def counterclockwise: Direction = East
+}
+
+case object West extends HorizontalDirection(-1) {
+  override def clockwise: Direction = North
+  override def counterclockwise: Direction = South
+}
 
 sealed trait RobotCommand
 case class Place(x: Int, y: Int, direction: Direction) extends RobotCommand
@@ -23,6 +50,7 @@ object VerticalDirection {
     North.toString.toUpperCase -> North,
     South.toString.toUpperCase -> South
   )
+
   def get = directionMapping.get _
 }
 
