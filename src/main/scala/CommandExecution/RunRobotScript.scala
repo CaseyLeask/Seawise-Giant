@@ -16,6 +16,20 @@ object RunRobotScript {
 
   type RobotScript[A] = PartialFunction[(RobotState, RobotCommand), RobotResult[A]]
 
+  def onTheBoard(x: Int, y: Int): Boolean = {
+    Tabletop.dimensions.contains(x) && Tabletop.dimensions.contains(y)
+  }
+
+  def convertPlacedObjectsToMap(placedObjects: Set[PlacedObject]): String = {
+    (smallDimension to largeDimension).map(y => {
+      (smallDimension to largeDimension).map(x => {
+        placedObjects.contains(PlacedObject(x, y))
+      }).map(isPlaced => {
+        if (isPlaced) "X" else "0"
+      }).reduce((po1, po2) => po1 + po2)
+    }).reduce((line1, line2) => line2 + "\n" + line1)
+  }
+
   def place: RobotScript[Unit] = {
     case (ValidState(_, _, _, placedObjects), Place(x, y, direction)) => RobotResult(ValidState(x, y, direction, placedObjects))
     case (_, Place(x, y, direction)) => RobotResult(ValidState(x, y, direction, Set()))
@@ -27,10 +41,6 @@ object RunRobotScript {
 
   def report: RobotScript[String] = {
     case (state@ValidState(x, y, direction, _), Report) => RobotResult(state, s"$x,$y,${direction.toString.toUpperCase}")
-  }
-
-  def onTheBoard(x: Int, y: Int): Boolean = {
-    Tabletop.dimensions.contains(x) && Tabletop.dimensions.contains(y)
   }
 
   def move: RobotScript[Unit] = {
@@ -66,16 +76,6 @@ object RunRobotScript {
       RobotResult(ValidState(x, y, d, placedObjects + PlacedObject(x+d.dx, y+d.dy)))
 
     case (state, PlaceObject) => RobotResult(state)
-  }
-
-  def convertPlacedObjectsToMap(placedObjects: Set[PlacedObject]): String = {
-    (smallDimension to largeDimension).map(y => {
-      (smallDimension to largeDimension).map(x => {
-        placedObjects.contains(PlacedObject(x, y))
-      }).map(isPlaced => {
-        if (isPlaced) "X" else "0"
-      }).reduce((po1, po2) => po1 + po2)
-    }).reduce((line1, line2) => line2 + "\n" + line1)
   }
 
   def mapCommand: RobotScript[String] = {
