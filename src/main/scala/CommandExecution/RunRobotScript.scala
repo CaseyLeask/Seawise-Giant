@@ -8,13 +8,13 @@ sealed trait RobotState
 case object InvalidState extends RobotState
 case class ValidState(x: Int, y: Int, direction: Direction, placedObjects: Set[PlacedObject]) extends RobotState
 
-case class RobotResult[A](state: RobotState, action: A = Unit)
+case class RobotResult(state: RobotState, action: Option[String] = None)
 
 object RunRobotScript {
   val smallDimension = Tabletop.dimensions.head
   val largeDimension = Tabletop.dimensions.last
 
-  type RobotScript[A] = PartialFunction[(RobotState, RobotCommand), RobotResult[A]]
+  type RobotScript = PartialFunction[(RobotState, RobotCommand), RobotResult]
 
   def onTheBoard(x: Int, y: Int): Boolean = {
     Tabletop.dimensions.contains(x) && Tabletop.dimensions.contains(y)
@@ -30,20 +30,22 @@ object RunRobotScript {
     }).reduce((line1, line2) => line2 + "\n" + line1)
   }
 
-  def place: RobotScript[Unit] = {
+  def place: RobotScript = {
+    case (state@ValidState(_, _, _, placedObjects), Place(x, y, _)) if placedObjects.contains(PlacedObject(x, y)) =>
+      RobotResult(state)
     case (ValidState(_, _, _, placedObjects), Place(x, y, direction)) => RobotResult(ValidState(x, y, direction, placedObjects))
     case (_, Place(x, y, direction)) => RobotResult(ValidState(x, y, direction, Set()))
   }
 
-  def invalidState: RobotScript[Unit] = {
+  def invalidState: RobotScript = {
     case (InvalidState, _) => RobotResult(InvalidState)
   }
 
-  def report: RobotScript[String] = {
-    case (state@ValidState(x, y, direction, _), Report) => RobotResult(state, s"$x,$y,${direction.toString.toUpperCase}")
+  def report: RobotScript = {
+    case (state@ValidState(x, y, direction, _), Report) => RobotResult(state, Some(s"$x,$y,${direction.toString.toUpperCase}"))
   }
 
-  def move: RobotScript[Unit] = {
+  def move: RobotScript = {
     case (state@ValidState(x, y, d, placedObjects), Move) if placedObjects.contains(PlacedObject(x + d.dx, y+ d.dy)) =>
       RobotResult(state)
 
@@ -53,15 +55,15 @@ object RunRobotScript {
     case (state, Move) => RobotResult(state)
   }
 
-  def left: RobotScript[Unit] = {
+  def left: RobotScript = {
     case (ValidState(x, y, d, placedObjects), Left) => RobotResult(ValidState(x, y, d.counterclockwise, placedObjects))
   }
 
-  def right: RobotScript[Unit] = {
+  def right: RobotScript = {
     case (ValidState(x, y, d, placedObjects), Right) => RobotResult(ValidState(x, y, d.clockwise, placedObjects))
   }
 
-  def diagonal: RobotScript[Unit] = {
+  def diagonal: RobotScript = {
     case (state@ValidState(x, y, direction, placedObjects), Diagonal(dv, dh)) if placedObjects.contains(PlacedObject(x+dh.dx, y+dv.dy)) =>
       RobotResult(state)
 
@@ -71,18 +73,18 @@ object RunRobotScript {
     case (state, Diagonal(_, _)) => RobotResult(state)
   }
 
-  def placeObject: RobotScript[Unit] = {
+  def placeObject: RobotScript = {
     case (ValidState(x, y, d, placedObjects), PlaceObject) if onTheBoard(x + d.dx, y + d.dy) =>
       RobotResult(ValidState(x, y, d, placedObjects + PlacedObject(x+d.dx, y+d.dy)))
 
     case (state, PlaceObject) => RobotResult(state)
   }
 
-  def mapCommand: RobotScript[String] = {
-    case (state@ValidState(_, _, _, placedObjects), MapCommand) => RobotResult(state, convertPlacedObjectsToMap(placedObjects))
+  def mapCommand: RobotScript = {
+    case (state@ValidState(_, _, _, placedObjects), MapCommand) => RobotResult(state, Some(convertPlacedObjectsToMap(placedObjects)))
   }
 
-  def nextResult(state: RobotState, command: RobotCommand): RobotResult[_] = {
+  def nextResult(state: RobotState, command: RobotCommand): RobotResult = {
     (
       place orElse
       mapCommand orElse
@@ -98,10 +100,9 @@ object RunRobotScript {
     )
   }
 
-  def nextState(result: RobotResult[_]): RobotState = {
-    if (result.action != ()) println(result.action.toString)
-
-    result.state
+  def nextState(result: RobotResult): RobotState = result match {
+    case RobotResult(state, Some(action)) => println(action); state
+    case RobotResult(state, None) => state
   }
 
   def execute(commands: Iterator[RobotCommand]): RobotState = {
