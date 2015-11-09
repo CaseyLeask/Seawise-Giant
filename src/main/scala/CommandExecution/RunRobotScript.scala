@@ -20,6 +20,10 @@ object RunRobotScript {
     Tabletop.dimensions.contains(x) && Tabletop.dimensions.contains(y)
   }
 
+  def validPlace(x: Int, y: Int, placedObjects: Set[PlacedObject]): Boolean = {
+    onTheBoard(x, y) && !placedObjects.contains(PlacedObject(x, y))
+  }
+
   def convertPlacedObjectsToMap(placedObjects: Set[PlacedObject]): String = {
     (smallDimension to largeDimension).map(y => {
       (smallDimension to largeDimension).map(x => {
@@ -31,10 +35,11 @@ object RunRobotScript {
   }
 
   def place: RobotScript = {
-    case (state@ValidState(_, _, _, placedObjects), Place(x, y, _)) if placedObjects.contains(PlacedObject(x, y)) =>
-      RobotResult(state)
-    case (ValidState(_, _, _, placedObjects), Place(x, y, direction)) => RobotResult(ValidState(x, y, direction, placedObjects))
-    case (_, Place(x, y, direction)) => RobotResult(ValidState(x, y, direction, Set()))
+    case (ValidState(_, _, _, placedObjects), Place(x, y, direction)) if validPlace(x, y, placedObjects) =>
+      RobotResult(ValidState(x, y, direction, placedObjects))
+    case (state@ValidState(_, _, _, _), Place(_, _, _)) => RobotResult(state)
+
+    case (InvalidState, Place(x, y, direction)) => RobotResult(ValidState(x, y, direction, Set()))
   }
 
   def invalidState: RobotScript = {
@@ -46,10 +51,7 @@ object RunRobotScript {
   }
 
   def move: RobotScript = {
-    case (state@ValidState(x, y, d, placedObjects), Move) if placedObjects.contains(PlacedObject(x + d.dx, y+ d.dy)) =>
-      RobotResult(state)
-
-    case (ValidState(x, y, d, placedObjects), Move) if onTheBoard(x + d.dx, y + d.dy) =>
+    case (ValidState(x, y, d, placedObjects), Move) if validPlace(x + d.dx, y + d.dy, placedObjects) =>
       RobotResult(ValidState(x + d.dx, y + d.dy, d, placedObjects))
 
     case (state, Move) => RobotResult(state)
@@ -64,17 +66,14 @@ object RunRobotScript {
   }
 
   def diagonal: RobotScript = {
-    case (state@ValidState(x, y, direction, placedObjects), Diagonal(dv, dh)) if placedObjects.contains(PlacedObject(x+dh.dx, y+dv.dy)) =>
-      RobotResult(state)
-
-    case (ValidState(x, y, direction, placedObjects), Diagonal(dv, dh)) if onTheBoard(x + dh.dx, y + dv.dy) && (direction == dv || direction == dh) =>
+    case (ValidState(x, y, direction, placedObjects), Diagonal(dv, dh)) if validPlace(x + dh.dx, y + dv.dy, placedObjects) && (direction == dv || direction == dh) =>
       RobotResult(ValidState(x+dh.dx, y+dv.dy, direction, placedObjects))
 
     case (state, Diagonal(_, _)) => RobotResult(state)
   }
 
   def placeObject: RobotScript = {
-    case (ValidState(x, y, d, placedObjects), PlaceObject) if onTheBoard(x + d.dx, y + d.dy) =>
+    case (ValidState(x, y, d, placedObjects), PlaceObject) if validPlace(x + d.dx, y + d.dy, placedObjects) =>
       RobotResult(ValidState(x, y, d, placedObjects + PlacedObject(x+d.dx, y+d.dy)))
 
     case (state, PlaceObject) => RobotResult(state)
