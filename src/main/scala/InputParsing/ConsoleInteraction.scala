@@ -1,7 +1,6 @@
 package InputParsing
 
 import CommandExecution.RunRobotScript
-
 import scala.io.Source
 
 object ConsoleInteraction {

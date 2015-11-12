@@ -1,4 +1,7 @@
 package InputParsing
+
+import Commands._
+import Direction._
 import org.specs2.mutable._
 
 class CommandParsingTest extends Specification {
