@@ -15,8 +15,7 @@ class CommandParsingTest extends Specification {
       "not parse invalid x values" in {
         val lines = Iterator(
           "PLACE -1,1,NORTH",
-          "PLACE 0.5,1,NORTH",
-          "PLACE 6,1,NORTH"
+          "PLACE 0.5,1,NORTH"
         )
         CommandParsing.toRobotCommands(lines).toList must be equalTo List()
       }
@@ -24,8 +23,7 @@ class CommandParsingTest extends Specification {
       "not parse invalid y values" in {
         val lines = Iterator(
           "PLACE 1,-1,NORTH",
-          "PLACE 1,0.5,NORTH",
-          "PLACE 1,6,NORTH"
+          "PLACE 1,0.5,NORTH"
         )
         CommandParsing.toRobotCommands(lines).toList must be equalTo List()
       }

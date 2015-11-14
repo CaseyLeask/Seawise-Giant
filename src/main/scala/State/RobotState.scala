@@ -2,7 +2,10 @@ package State
 
 import Commands._
 import Direction.Direction
-import InputParsing._
+
+object Tabletop {
+  def dimensions = 0 to 4
+}
 
 case class PlacedObject(x: Int, y: Int)
 
@@ -38,9 +41,8 @@ object RobotState {
   def place: RobotScript = {
     case (ValidState(_, _, _, placedObjects), Place(x, y, direction)) if validPlace(x, y, placedObjects) =>
       RobotResult(ValidState(x, y, direction, placedObjects))
-    case (state@ValidState(_, _, _, _), Place(_, _, _)) => RobotResult(state)
-
-    case (InvalidState, Place(x, y, direction)) => RobotResult(ValidState(x, y, direction, Set()))
+    case (InvalidState, Place(x, y, direction)) if validPlace(x, y, Set()) => RobotResult(ValidState(x, y, direction, Set()))
+    case (state, Place(_, _, _)) => RobotResult(state)
   }
 
   def invalidState: RobotScript = {

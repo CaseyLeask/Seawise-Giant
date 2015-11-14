@@ -27,8 +27,13 @@ class RobotStateTest extends org.specs2.mutable.Specification {
         RobotState.nextResult(InvalidState, Diagonal(North, West)) should beEqualTo(RobotResult(InvalidState,None))
       }
 
-      "should place correctly" in {
+      "place in a valid location" in {
         RobotState.nextResult(InvalidState, Place(0, 0, North)) should beEqualTo(RobotResult(ValidState(0, 0, North, Set()),None))
+      }
+
+      "not place in an invalid location" in {
+        RobotState.nextResult(InvalidState, Place(6, 0, North)) should beEqualTo(RobotResult(InvalidState))
+        RobotState.nextResult(InvalidState, Place(0, 6, North)) should beEqualTo(RobotResult(InvalidState))
       }
 
       "should not place objects" in {
@@ -265,8 +270,13 @@ class RobotStateTest extends org.specs2.mutable.Specification {
         RobotState.nextResult(ValidState(0, 0, North, Set()), Report) should beEqualTo(RobotResult(ValidState(0, 0, North, Set()),Some("0,0,NORTH")))
       }
 
-      "place correctly" in {
+      "place with a valid command" in {
         RobotState.nextResult(ValidState(4, 4, North, Set()), Place(0, 0, North)) should beEqualTo(RobotResult(ValidState(0, 0, North, Set()),None))
+      }
+
+      "not place with an invalid command" in {
+        RobotState.nextResult(ValidState(4, 4, North, Set()), Place(6, 0, North)) should beEqualTo(RobotResult(ValidState(4, 4, North, Set()),None))
+        RobotState.nextResult(ValidState(4, 4, North, Set()), Place(0, 6, North)) should beEqualTo(RobotResult(ValidState(4, 4, North, Set()),None))
       }
 
       "place objects correctly when there are existing objects" in {
