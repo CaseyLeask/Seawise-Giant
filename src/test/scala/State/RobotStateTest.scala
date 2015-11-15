@@ -2,7 +2,7 @@ package State
 
 import Commands._
 import Direction.{East, North, South, West}
-import State._
+import Tabletop._
 
 class RobotStateTest extends org.specs2.mutable.Specification {
   "RobotState" should {
