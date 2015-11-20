@@ -18,7 +18,7 @@ object CommandParsing {
     } yield Diagonal(firstDirection, secondDirection)
   }
 
-  def toRobotCommands(lines: Iterator[String]): Iterator[RobotCommand] = lines.flatMap {
+  def toRobotCommands(lines: TraversableOnce[String]): TraversableOnce[RobotCommand] = lines.flatMap[RobotCommand] {
     case placeRegex(x, y, direction) => place(x, y, direction)
     case "MOVE" => Some(Move)
     case "LEFT" => Some(Left)
