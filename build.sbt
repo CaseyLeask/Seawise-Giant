@@ -2,8 +2,6 @@ name := "oppama"
 
 version := "1.0"
 
-scalaVersion := "2.11.7"
+scalaVersion := "3.3.3"
 
-libraryDependencies ++= Seq("org.specs2" %% "specs2-core" % "3.6.5" % "test")
-
-scalacOptions in Test ++= Seq("-Yrangepos")
+libraryDependencies += "org.specs2" %% "specs2-core" % "4.20.5" % Test

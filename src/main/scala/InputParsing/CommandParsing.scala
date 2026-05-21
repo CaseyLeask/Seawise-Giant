@@ -18,15 +18,17 @@ object CommandParsing {
     } yield Diagonal(firstDirection, secondDirection)
   }
 
-  def toRobotCommands(lines: TraversableOnce[String]): TraversableOnce[RobotCommand] = lines.flatMap[RobotCommand] {
-    case placeRegex(x, y, direction) => place(x, y, direction)
-    case "MOVE" => Some(Move)
-    case "LEFT" => Some(Left)
-    case "RIGHT" => Some(Right)
-    case "REPORT" => Some(Report)
-    case diagonalRegex(firstDirection, secondDirection) => diagonal(firstDirection, secondDirection)
-    case "PLACE_OBJECT" => Some(PlaceObject)
-    case "MAP" => Some(MapCommand)
-    case _ => None
+  def toRobotCommands(lines: IterableOnce[String]): Iterator[RobotCommand] = {
+    lines.iterator.flatMap[RobotCommand] {
+      case placeRegex(x, y, direction) => place(x, y, direction)
+      case "MOVE" => Some(Move)
+      case "LEFT" => Some(Left)
+      case "RIGHT" => Some(Right)
+      case "REPORT" => Some(Report)
+      case diagonalRegex(firstDirection, secondDirection) => diagonal(firstDirection, secondDirection)
+      case "PLACE_OBJECT" => Some(PlaceObject)
+      case "MAP" => Some(MapCommand)
+      case _ => None
+    }
   }
 }
