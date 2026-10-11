@@ -4,11 +4,15 @@ import Commands._
 import Direction.{Direction, HorizontalDirection, VerticalDirection}
 
 object CommandParsing {
-  val placeRegex = "PLACE (\\d+),(\\d)+,(\\w+)".r
+  val placeRegex = "PLACE (\\d+),(\\d+),(\\w+)".r
   val diagonalRegex = "DIAGONAL (\\w+),(\\w+)".r
 
   def place(x: String, y: String, direction: String): Option[Place] = {
-    Direction.get(direction).map(Place(x.toInt, y.toInt, _))
+    for {
+      xValue <- x.toIntOption
+      yValue <- y.toIntOption
+      placeDirection <- Direction.get(direction)
+    } yield Place(xValue, yValue, placeDirection)
   }
 
   def diagonal(first: String, second: String) = {

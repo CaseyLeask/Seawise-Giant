@@ -12,6 +12,19 @@ class CommandParsingTest extends Specification {
         CommandParsing.toRobotCommands(lines).toList must be equalTo List(Place(1,1,North))
       }
 
+      "parse multi-digit values" in {
+        val lines = Iterator("PLACE 10,12,NORTH")
+        CommandParsing.toRobotCommands(lines).toList must be equalTo List(Place(10,12,North))
+      }
+
+      "not parse values too large for an Int" in {
+        val lines = Iterator(
+          "PLACE 99999999999,1,NORTH",
+          "PLACE 1,99999999999,NORTH"
+        )
+        CommandParsing.toRobotCommands(lines).toList must be equalTo List()
+      }
+
       "not parse invalid x values" in {
         val lines = Iterator(
           "PLACE -1,1,NORTH",
