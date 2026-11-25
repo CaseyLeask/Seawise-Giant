@@ -2,13 +2,18 @@ package InputParsing
 
 import Commands._
 import Direction.{Direction, HorizontalDirection, VerticalDirection}
+import scala.util.Try
 
 object CommandParsing {
-  val placeRegex = "PLACE (\\d+),(\\d)+,(\\w+)".r
+  val placeRegex = "PLACE (\\d+),(\\d+),(\\w+)".r
   val diagonalRegex = "DIAGONAL (\\w+),(\\w+)".r
 
   def place(x: String, y: String, direction: String): Option[Place] = {
-    Direction.get(direction).map(Place(x.toInt, y.toInt, _))
+    for {
+      d <- Direction.get(direction)
+      xi <- Try(x.toInt).toOption
+      yi <- Try(y.toInt).toOption
+    } yield Place(xi, yi, d)
   }
 
   def diagonal(first: String, second: String) = {

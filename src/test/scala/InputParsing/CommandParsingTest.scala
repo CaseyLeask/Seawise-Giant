@@ -12,6 +12,20 @@ class CommandParsingTest extends Specification {
         CommandParsing.toRobotCommands(lines).toList must be equalTo List(Place(1,1,North))
       }
 
+      "parse multi-digit coordinates" in {
+        val lines = Iterator("PLACE 1,14,NORTH")
+        CommandParsing.toRobotCommands(lines).toList must be equalTo List(Place(1,14,North))
+      }
+
+      "not parse overflowing coordinates" in {
+        val lines = Iterator(
+          "PLACE 2147483648,0,NORTH",
+          "PLACE 0,2147483648,NORTH",
+          "PLACE 99999999999,99999999999,NORTH"
+        )
+        CommandParsing.toRobotCommands(lines).toList must be equalTo List()
+      }
+
       "not parse invalid x values" in {
         val lines = Iterator(
           "PLACE -1,1,NORTH",
